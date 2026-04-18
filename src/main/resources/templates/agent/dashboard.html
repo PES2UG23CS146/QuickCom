@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Agent Dashboard</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; }
+        .navbar { background: #2c7a7b; color: white; padding: 14px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: #b2f5ea; text-decoration: none; margin-left: 20px; }
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: #1a202c; margin-bottom: 8px; }
+        .subtitle { color: #718096; margin-bottom: 30px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .tile { background: white; border-radius: 12px; padding: 28px 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.08); text-decoration: none; color: #1a202c; transition: transform 0.2s; }
+        .tile:hover { transform: translateY(-3px); }
+        .tile .icon { font-size: 2.5rem; margin-bottom: 12px; }
+        .tile h3 { font-size: 1rem; color: #4a5568; }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <span>⚡ QuickCommerce — Delivery</span>
+    <div>
+        <span th:text="${user.name}"></span>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+<div class="container">
+    <h1>Hey, <span th:text="${user.name}">Agent</span>! 🚴</h1>
+    <p class="subtitle">Ready for deliveries?</p>
+    <div class="grid">
+        <a th:href="@{/agent/orders}" class="tile">
+            <div class="icon">📦</div>
+            <h3>My Deliveries</h3>
+        </a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>My Orders</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; }
+        .navbar { background: #2d3748; color: white; padding: 14px 30px; display: flex; justify-content: space-between; }
+        .navbar a { color: #90cdf4; text-decoration: none; margin-left: 20px; }
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        h1 { margin-bottom: 24px; color: #1a202c; }
+        .order-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .badge { padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+        .badge-PENDING { background: #fef3c7; color: #92400e; }
+        .badge-CONFIRMED { background: #dbeafe; color: #1e40af; }
+        .badge-ASSIGNED { background: #e0e7ff; color: #3730a3; }
+        .badge-OUT_FOR_DELIVERY { background: #d1fae5; color: #065f46; }
+        .badge-DELIVERED { background: #d1fae5; color: #065f46; }
+        .badge-CANCELLED { background: #fee2e2; color: #991b1b; }
+        .badge-REFUNDED { background: #fce7f3; color: #9d174d; }
+        .actions a { margin-right: 10px; color: #4299e1; text-decoration: none; font-size: 0.85rem; }
+        .items-list { font-size: 0.85rem; color: #718096; margin-top: 8px; }
+        .alert { padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; background: #f0fff4; color: #276749; border: 1px solid #c6f6d5; }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <span>⚡ QuickCommerce</span>
+    <div>
+        <a th:href="@{/user/shop}">Shop</a>
+        <a th:href="@{/user/cart}">Cart</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+<div class="container">
+    <h1>📦 My Orders</h1>
+    <div th:if="${param.placed}" class="alert">Order placed! Please proceed to payment.</div>
+    <div th:if="${param.paid}" class="alert">Payment successful!</div>
+    <div th:if="${param.feedback}" class="alert">Thank you for your feedback!</div>
+    <div th:if="${#lists.isEmpty(orders)}" style="color:#718096;">No orders yet.</div>
+    <div th:each="order : ${orders}" class="order-card">
+        <div class="order-header">
+            <strong th:text="'Order #' + ${order.id}">Order</strong>
+            <span class="badge" th:classappend="'badge-' + ${order.status}" th:text="${order.status}">STATUS</span>
+        </div>
+        <div>Address: <span th:text="${order.deliveryAddress}"></span></div>
+        <div>Total: <strong th:text="'₹' + ${order.totalAmount}"></strong></div>
+        <div class="items-list">
+            <span th:each="item : ${order.items}" th:text="${item.product.name} + ' x' + ${item.quantity} + '  '"></span>
+        </div>
+        <div class="actions" style="margin-top:12px;">
+            <a th:if="${order.status.name() == 'PENDING'}" th:href="@{/user/pay/{id}(id=${order.id})}">💳 Pay Now</a>
+            <a th:if="${order.status.name() == 'PENDING'}" th:href="@{/user/orders/cancel/{id}(id=${order.id})}">❌ Cancel</a>
+            <a th:if="${order.status.name() == 'DELIVERED'}" th:href="@{/user/feedback/{id}(id=${order.id})}">⭐ Leave Feedback</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

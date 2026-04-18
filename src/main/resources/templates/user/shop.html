@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Shop</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; }
+        .navbar { background: #2d3748; color: white; padding: 14px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: #90cdf4; text-decoration: none; margin-left: 20px; }
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        h1 { margin-bottom: 24px; color: #1a202c; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .product-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .product-card h3 { color: #2d3748; margin-bottom: 8px; }
+        .product-card .price { font-size: 1.2rem; font-weight: 700; color: #48bb78; margin-bottom: 4px; }
+        .product-card .stock { font-size: 0.8rem; color: #718096; margin-bottom: 12px; }
+        .product-card .category { font-size: 0.75rem; background: #ebf8ff; color: #2b6cb0; padding: 2px 8px; border-radius: 12px; display: inline-block; margin-bottom: 10px; }
+        form input[type=number] { width: 60px; padding: 5px 8px; border: 1px solid #e2e8f0; border-radius: 6px; }
+        button { padding: 8px 16px; background: #4299e1; color: white; border: none; border-radius: 6px; cursor: pointer; margin-left: 8px; }
+        button:hover { background: #3182ce; }
+        .empty { color: #718096; font-size: 1.1rem; margin-top: 40px; text-align: center; }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <span>⚡ QuickCommerce</span>
+    <div>
+        <a th:href="@{/user/dashboard}">Dashboard</a>
+        <a th:href="@{/user/cart}">🧺 Cart</a>
+        <a th:href="@{/user/orders}">My Orders</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+<div class="container">
+    <h1>🛒 Shop</h1>
+    <div th:if="${#lists.isEmpty(products)}" class="empty">No products available right now.</div>
+    <div class="grid" th:unless="${#lists.isEmpty(products)}">
+        <div class="product-card" th:each="p : ${products}">
+            <div class="category" th:text="${p.category}">Category</div>
+            <h3 th:text="${p.name}">Product</h3>
+            <div class="price" th:text="'₹' + ${p.price}">₹0</div>
+            <div class="stock" th:text="'In Stock: ' + ${p.stockQuantity}">Stock</div>
+            <form method="post" th:action="@{/user/cart/add}" style="display:flex; align-items:center;">
+                <input type="hidden" name="productId" th:value="${p.id}" />
+                <input type="number" name="quantity" value="1" min="1" th:max="${p.stockQuantity}" />
+                <button type="submit">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Cart</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; }
+        .navbar { background: #2d3748; color: white; padding: 14px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: #90cdf4; text-decoration: none; margin-left: 20px; }
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        h1 { margin-bottom: 24px; color: #1a202c; }
+        table { width: 100%; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border-collapse: collapse; overflow: hidden; }
+        th { background: #edf2f7; padding: 14px 16px; text-align: left; font-size: 0.85rem; color: #4a5568; text-transform: uppercase; }
+        td { padding: 14px 16px; border-bottom: 1px solid #f7fafc; }
+        .total-row { background: #f7fafc; font-weight: 700; }
+        .btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+        .btn-danger { background: #fc8181; color: white; }
+        .btn-danger:hover { background: #e53e3e; }
+        .order-form { margin-top: 24px; background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .order-form input { width: 100%; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px; margin: 10px 0; }
+        .btn-primary { background: #48bb78; color: white; padding: 12px 24px; font-size: 1rem; font-weight: 600; }
+        .btn-primary:hover { background: #38a169; }
+        .empty { color: #718096; margin-top: 20px; }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <span>⚡ QuickCommerce</span>
+    <div>
+        <a th:href="@{/user/shop}">Shop</a>
+        <a th:href="@{/user/orders}">My Orders</a>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+<div class="container">
+    <h1>🧺 My Cart</h1>
+    <div th:if="${#lists.isEmpty(cartItems)}" class="empty">
+        Your cart is empty. <a th:href="@{/user/shop}">Start shopping →</a>
+    </div>
+    <div th:unless="${#lists.isEmpty(cartItems)}">
+        <table>
+            <thead>
+                <tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="item : ${cartItems}">
+                    <td th:text="${item.product.name}">Product</td>
+                    <td th:text="'₹' + ${item.product.price}">Price</td>
+                    <td th:text="${item.quantity}">Qty</td>
+                    <td th:text="'₹' + ${item.subtotal}">Total</td>
+                    <td>
+                        <form method="post" th:action="@{/user/cart/remove}">
+                            <input type="hidden" name="productId" th:value="${item.product.id}" />
+                            <button class="btn btn-danger" type="submit">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="3">Total</td>
+                    <td colspan="2" th:text="'₹' + ${total}">₹0</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="order-form">
+            <h3>Place Order</h3>
+            <form method="post" th:action="@{/user/order/place}">
+                <input type="text" name="deliveryAddress" placeholder="Enter delivery address" required />
+                <button class="btn btn-primary" type="submit">Place Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

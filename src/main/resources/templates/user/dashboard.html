@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>User Dashboard</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; }
+        .navbar { background: #2d3748; color: white; padding: 14px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .navbar a { color: #90cdf4; text-decoration: none; margin-left: 20px; font-size: 0.9rem; }
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: #1a202c; margin-bottom: 6px; }
+        .subtitle { color: #718096; margin-bottom: 30px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .tile { background: white; border-radius: 12px; padding: 28px 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.08); text-decoration: none; color: #1a202c; transition: transform 0.2s; }
+        .tile:hover { transform: translateY(-3px); }
+        .tile .icon { font-size: 2.5rem; margin-bottom: 12px; }
+        .tile h3 { font-size: 1rem; color: #4a5568; }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <span>⚡ QuickCommerce</span>
+    <div>
+        <span th:text="'Hello, ' + ${user.name}"></span>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+</div>
+<div class="container">
+    <h1>Welcome back, <span th:text="${user.name}">User</span>!</h1>
+    <p class="subtitle">What would you like to do today?</p>
+    <div class="grid">
+        <a th:href="@{/user/shop}" class="tile">
+            <div class="icon">🛒</div>
+            <h3>Shop Products</h3>
+        </a>
+        <a th:href="@{/user/cart}" class="tile">
+            <div class="icon">🧺</div>
+            <h3>My Cart</h3>
+        </a>
+        <a th:href="@{/user/orders}" class="tile">
+            <div class="icon">📦</div>
+            <h3>My Orders</h3>
+        </a>
+    </div>
+</div>
+</body>
+</html>

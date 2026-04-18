@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Admin Orders</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; }
+        .navbar { background: #1a202c; color: white; padding: 14px 30px; display: flex; justify-content: space-between; }
+        .navbar a { color: #90cdf4; text-decoration: none; margin-left: 20px; }
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: #1a202c; margin-bottom: 24px; }
+        table { width: 100%; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border-collapse: collapse; overflow: hidden; }
+        th { background: #edf2f7; padding: 12px 16px; text-align: left; font-size: 0.82rem; color: #4a5568; text-transform: uppercase; }
+        td { padding: 12px 16px; border-bottom: 1px solid #f7fafc; font-size: 0.88rem; vertical-align: middle; }
+        .badge { padding: 3px 10px; border-radius: 10px; font-size: 0.78rem; font-weight: 600; }
+        .badge-PENDING { background: #fef3c7; color: #92400e; }
+        .badge-CONFIRMED { background: #dbeafe; color: #1e40af; }
+        .badge-ASSIGNED { background: #e0e7ff; color: #3730a3; }
+        .badge-DELIVERED { background: #d1fae5; color: #065f46; }
+        .badge-CANCELLED { background: #fee2e2; color: #991b1b; }
+        .badge-REFUNDED { background: #fce7f3; color: #9d174d; }
+        select { padding: 5px 8px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 0.85rem; }
+        button { padding: 6px 14px; background: #4299e1; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+        button:hover { background: #3182ce; }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <span>⚡ QuickCommerce — Admin</span>
+    <div><a th:href="@{/admin/dashboard}">Dashboard</a><a th:href="@{/logout}">Logout</a></div>
+</div>
+<div class="container">
+    <h1>🛒 Orders</h1>
+    <table>
+        <thead>
+            <tr><th>ID</th><th>User</th><th>Total</th><th>Status</th><th>Agent</th><th>Assign Agent</th></tr>
+        </thead>
+        <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}"></td>
+                <td th:text="${order.user.name}"></td>
+                <td th:text="'₹' + ${order.totalAmount}"></td>
+                <td><span class="badge" th:classappend="'badge-' + ${order.status}" th:text="${order.status}"></span></td>
+                <td th:text="${order.deliveryAgent != null} ? ${order.deliveryAgent.name} : '—'"></td>
+                <td>
+                    <form method="post" th:action="@{/admin/orders/assign}" style="display:flex; gap:8px;">
+                        <input type="hidden" name="orderId" th:value="${order.id}" />
+                        <select name="agentId">
+                            <option value="">Select Agent</option>
+                            <option th:each="a : ${agents}" th:value="${a.id}" th:text="${a.name}"></option>
+                        </select>
+                        <button type="submit">Assign</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

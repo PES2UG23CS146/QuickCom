@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>My Deliveries</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; }
+        .navbar { background: #2c7a7b; color: white; padding: 14px 30px; display: flex; justify-content: space-between; }
+        .navbar a { color: #b2f5ea; text-decoration: none; margin-left: 20px; }
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        h1 { color: #1a202c; margin-bottom: 24px; }
+        .order-card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+        .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .badge { padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+        .badge-ASSIGNED { background: #e0e7ff; color: #3730a3; }
+        .badge-OUT_FOR_DELIVERY { background: #fef3c7; color: #92400e; }
+        .badge-DELIVERED { background: #d1fae5; color: #065f46; }
+        .actions { margin-top: 12px; display: flex; gap: 10px; }
+        button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+        .btn-orange { background: #ed8936; color: white; }
+        .btn-green { background: #48bb78; color: white; }
+        .info { color: #718096; font-size: 0.9rem; margin: 4px 0; }
+    </style>
+</head>
+<body>
+<div class="navbar">
+    <span>⚡ QuickCommerce — Delivery</span>
+    <div><a th:href="@{/agent/dashboard}">Dashboard</a><a th:href="@{/logout}">Logout</a></div>
+</div>
+<div class="container">
+    <h1>📦 My Deliveries</h1>
+    <div th:if="${#lists.isEmpty(orders)}" style="color:#718096;">No deliveries assigned yet.</div>
+    <div th:each="order : ${orders}" class="order-card">
+        <div class="order-header">
+            <strong th:text="'Order #' + ${order.id}">Order</strong>
+            <span class="badge" th:classappend="'badge-' + ${order.status}" th:text="${order.status}"></span>
+        </div>
+        <p class="info">Customer: <strong th:text="${order.user.name}"></strong></p>
+        <p class="info">Address: <span th:text="${order.deliveryAddress}"></span></p>
+        <p class="info">Total: <strong th:text="'₹' + ${order.totalAmount}"></strong></p>
+        <div class="actions">
+            <form method="post" th:action="@{/agent/outfordelivery/{id}(id=${order.id})}">
+                <button class="btn-orange" type="submit"
+                        th:disabled="${order.status.name() != 'ASSIGNED'}">
+                    Mark Out for Delivery
+                </button>
+            </form>
+            <form method="post" th:action="@{/agent/deliver/{id}(id=${order.id})}">
+                <button class="btn-green" type="submit"
+                        th:disabled="${order.status.name() != 'OUT_FOR_DELIVERY'}">
+                    Mark Delivered
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

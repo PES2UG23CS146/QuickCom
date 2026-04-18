@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login – QuickCommerce</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background: white; border-radius: 12px; padding: 40px; width: 380px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #1a202c; margin-bottom: 8px; font-size: 1.8rem; }
+        .subtitle { text-align: center; color: #718096; margin-bottom: 28px; font-size: 0.9rem; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; color: #4a5568; margin-bottom: 6px; }
+        input { width: 100%; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 0.95rem; transition: border 0.2s; }
+        input:focus { outline: none; border-color: #4299e1; }
+        button { width: 100%; padding: 12px; background: #4299e1; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 8px; }
+        button:hover { background: #3182ce; }
+        .alert { padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; font-size: 0.9rem; }
+        .alert-error { background: #fff5f5; color: #c53030; border: 1px solid #fed7d7; }
+        .alert-success { background: #f0fff4; color: #276749; border: 1px solid #c6f6d5; }
+        .footer { text-align: center; margin-top: 20px; font-size: 0.85rem; color: #718096; }
+        .footer a { color: #4299e1; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>⚡ QuickCommerce</h2>
+    <p class="subtitle">Sign in to your account</p>
+
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+    <form method="post" th:action="@{/login}">
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="you@example.com" required />
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="••••••••" required />
+        </div>
+        <button type="submit">Sign In</button>
+    </form>
+    <div class="footer">
+        Don't have an account? <a th:href="@{/register}">Register</a>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><title>Payment</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background: white; border-radius: 12px; padding: 40px; width: 420px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+        h2 { margin-bottom: 20px; color: #1a202c; }
+        .order-summary { background: #f7fafc; border-radius: 8px; padding: 16px; margin-bottom: 24px; }
+        .order-summary p { margin: 4px 0; color: #4a5568; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; color: #4a5568; margin-bottom: 6px; }
+        select { width: 100%; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 0.95rem; margin-bottom: 20px; }
+        button { width: 100%; padding: 12px; background: #48bb78; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+        button:hover { background: #38a169; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>💳 Complete Payment</h2>
+    <div class="order-summary" th:if="${order}">
+        <p>Order #<span th:text="${order.id}"></span></p>
+        <p>Amount: <strong th:text="'₹' + ${order.totalAmount}"></strong></p>
+        <p>Address: <span th:text="${order.deliveryAddress}"></span></p>
+    </div>
+    <form method="post" th:action="@{/user/pay/{id}(id=${order.id})}">
+        <label>Payment Method</label>
+        <select name="method">
+            <option th:each="m : ${methods}" th:value="${m}" th:text="${m}"></option>
+        </select>
+        <button type="submit">Pay Now</button>
+    </form>
+</div>
+</body>
+</html>
